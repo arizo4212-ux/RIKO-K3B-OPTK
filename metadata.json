@@ -1,0 +1,6 @@
+{
+  "name": "Nusantara Port TOS - Operasional Terminal Peti Kemas",
+  "description": "Sistem Operasional Terminal Peti Kemas Real-Time terintegrasi Firebase Firestore. Dilengkapi pelacakan kontainer, manajemen kapal dermaga, yard slotting, transaksi gate in/out, analitik performa, dan notifikasi instan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

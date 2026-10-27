@@ -1,0 +1,144 @@
+{
+  "entities": {
+    "Container": {
+      "title": "Container",
+      "description": "Master and current state of a shipping container in the terminal",
+      "type": "object",
+      "properties": {
+        "containerNo": { "type": "string", "maxLength": 30 },
+        "isoCode": { "type": "string", "maxLength": 10 },
+        "size": { "type": "string", "enum": ["20ft", "40ft", "45ft"] },
+        "type": { "type": "string", "enum": ["Dry", "Reefer", "Dangerous Goods (DG)", "Flat Rack", "Open Top", "Tank"] },
+        "status": { "type": "string", "enum": ["Gate-In", "In-Yard", "Vessel-Discharged", "Vessel-Loaded", "Gate-Out"] },
+        "category": { "type": "string", "enum": ["Import", "Export", "Transhipment", "Empty"] },
+        "sealNo": { "type": "string", "maxLength": 50 },
+        "shippingLine": { "type": "string", "maxLength": 100 },
+        "vesselName": { "type": "string", "maxLength": 100 },
+        "yardLocation": { "type": "string", "maxLength": 50 },
+        "grossWeight": { "type": "number" },
+        "tareWeight": { "type": "number" },
+        "netWeight": { "type": "number" },
+        "customsStatus": { "type": "string", "enum": ["Pending", "Cleared", "Hold", "Red Channel"] },
+        "dwellTimeDays": { "type": "number" },
+        "temperature": { "type": "string", "maxLength": 20 },
+        "updatedAt": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["containerNo", "size", "type", "status", "shippingLine"]
+    },
+    "Vessel": {
+      "title": "Vessel",
+      "description": "Vessel information, schedule, and berthing status",
+      "type": "object",
+      "properties": {
+        "vesselName": { "type": "string", "maxLength": 100 },
+        "imoNumber": { "type": "string", "maxLength": 30 },
+        "callSign": { "type": "string", "maxLength": 30 },
+        "shippingAgent": { "type": "string", "maxLength": 100 },
+        "berthSlot": { "type": "string", "maxLength": 50 },
+        "status": { "type": "string", "enum": ["Scheduled", "Approaching", "Berthing", "Operations", "Completed", "Departed"] },
+        "eta": { "type": "string" },
+        "etd": { "type": "string" },
+        "totalDischarge": { "type": "number" },
+        "completedDischarge": { "type": "number" },
+        "totalLoading": { "type": "number" },
+        "completedLoading": { "type": "number" },
+        "cranesAssigned": { "type": "string", "maxLength": 100 },
+        "productivityGMPH": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["vesselName", "berthSlot", "status", "eta", "etd"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Container terminal operations log (Gate In/Out, Loading, Discharge, Yard Transfer)",
+      "type": "object",
+      "properties": {
+        "transactionId": { "type": "string", "maxLength": 50 },
+        "transactionType": { "type": "string", "enum": ["Gate-In", "Gate-Out", "Vessel-Discharge", "Vessel-Load", "Yard-Shift", "Inspection"] },
+        "containerNo": { "type": "string", "maxLength": 30 },
+        "vesselName": { "type": "string", "maxLength": 100 },
+        "truckPlate": { "type": "string", "maxLength": 30 },
+        "driverName": { "type": "string", "maxLength": 100 },
+        "equipmentId": { "type": "string", "maxLength": 50 },
+        "sourceLocation": { "type": "string", "maxLength": 50 },
+        "targetLocation": { "type": "string", "maxLength": 50 },
+        "operatorName": { "type": "string", "maxLength": 100 },
+        "notes": { "type": "string", "maxLength": 255 },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["transactionId", "transactionType", "containerNo", "operatorName", "timestamp"]
+    },
+    "TrackingHistory": {
+      "title": "TrackingHistory",
+      "description": "Chronological audit trail of each container event in the terminal",
+      "type": "object",
+      "properties": {
+        "containerNo": { "type": "string", "maxLength": 30 },
+        "event": { "type": "string", "maxLength": 100 },
+        "stage": { "type": "string", "maxLength": 50 },
+        "location": { "type": "string", "maxLength": 50 },
+        "operator": { "type": "string", "maxLength": 100 },
+        "details": { "type": "string", "maxLength": 255 },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["containerNo", "event", "stage", "location", "timestamp"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Real-time alerts for terminal operations",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 100 },
+        "message": { "type": "string", "maxLength": 255 },
+        "type": { "type": "string", "enum": ["info", "warning", "success", "alert"] },
+        "priority": { "type": "string", "enum": ["low", "medium", "high", "urgent"] },
+        "read": { "type": "boolean" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["title", "message", "type", "timestamp"]
+    },
+    "TerminalEquipment": {
+      "title": "TerminalEquipment",
+      "description": "Quay cranes, RTGs, reach stackers, and trucks deployed in terminal",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "maxLength": 30 },
+        "name": { "type": "string", "maxLength": 100 },
+        "category": { "type": "string", "enum": ["Quay Crane (QC)", "Rubber Tyred Gantry (RTG)", "Reach Stacker (RS)", "Terminal Truck (TT)"] },
+        "status": { "type": "string", "enum": ["Active", "Idle", "Maintenance", "Standby"] },
+        "assignedTo": { "type": "string", "maxLength": 100 },
+        "operator": { "type": "string", "maxLength": 100 },
+        "fuelLevel": { "type": "number" },
+        "movesCompleted": { "type": "number" }
+      },
+      "required": ["code", "name", "category", "status"]
+    }
+  },
+  "firestore": {
+    "/containers/{containerId}": {
+      "schema": "Container",
+      "description": "Collection of terminal shipping containers"
+    },
+    "/vessels/{vesselId}": {
+      "schema": "Vessel",
+      "description": "Collection of operational vessels and schedules"
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Live operations transaction logs"
+    },
+    "/tracking_history/{trackingId}": {
+      "schema": "TrackingHistory",
+      "description": "Container tracking chronological events"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Real-time operational alerts"
+    },
+    "/equipment/{equipmentId}": {
+      "schema": "TerminalEquipment",
+      "description": "Equipment fleet master and live status"
+    }
+  }
+}
